@@ -508,7 +508,6 @@ unprotect_non_code_block <- function(non_code_block) {
 
 untangle_text <- function(node) {
   text <- xml2::xml_text(node)
-  text <- gsub("\\s+", " ", text) # like str_squish w/o str_trim
   # trying to only leave space where needed
   no_left_sibling <- (length(xml2::xml_find_first(
     node,

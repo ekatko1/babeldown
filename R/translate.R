@@ -193,10 +193,10 @@ translate_part <- function(
   purrr::walk(fences, protect_fence)
 
   ## protect content inside emph and strong tags ----
-  emphs <- woolish$get_protected("emph")
+  emphs <- xml2::xml_find_all(woolish$body, ".//d1:emph")
   purrr::walk(emphs, protect_emph)
 
-  strongs <- woolish$get_protected("strong")
+  strongs <- xml2::xml_find_all(woolish$body, ".//d1:strong")
   purrr::walk(strongs, protect_strong)
 
 
@@ -523,16 +523,18 @@ unprotect_non_code_block <- function(non_code_block) {
 }
 
 protect_emph <- function(emph) {
-  xml2::xml_attr(emph, "emph") <- "yes"
+  # Convert <emph>content</emph> to <emph_protected>content</emph_protected>
   xml2::xml_name(emph) <- "emph_protected"
+  xml2::xml_attr(emph, "emph_orig") <- "yes"
 }
 unprotect_emph <- function(emph) {
   xml2::xml_name(emph) <- "emph"
 }
 
 protect_strong <- function(strong) {
-  xml2::xml_attr(strong, "strong") <- "yes"
+  # Convert <strong>content</strong> to <strong_protected>content</strong_protected>
   xml2::xml_name(strong) <- "strong_protected"
+  xml2::xml_attr(strong, "strong_orig") <- "yes"
 }
 unprotect_strong <- function(strong) {
   xml2::xml_name(strong) <- "strong"
@@ -552,7 +554,7 @@ untangle_text <- function(node) {
   } else {
     "right"
   }
-  text <- trimws(text, which = which)
+#  text <- trimws(text, which = which)
   xml2::xml_remove(xml2::xml_children(node))
   xml2::xml_replace(
     node,

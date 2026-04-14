@@ -6,14 +6,14 @@ http_interactions:
     status: 200
     headers:
       content-type: application/json; charset=utf-8
-      date: Mon, 26 Jan 2026 12:16:19 GMT
-      x-trace-id: d087e8b051d8484fa970fee280a0cd6f
+      date: Tue, 14 Apr 2026 15:50:54 GMT
+      x-trace-id: 773e258f2803488686e58a06f1979a6b
       access-control-expose-headers: Server-Timing, X-Trace-ID
-      server-timing: l7_lb_tls;dur=49, l7_lb_idle;dur=4, l7_lb_receive;dur=0, l7_lb_total;dur=88
+      server-timing: l7_lb_tls;dur=138, l7_lb_idle;dur=0, l7_lb_receive;dur=0, l7_lb_total;dur=181
       strict-transport-security: max-age=63072000; includeSubDomains; preload
       vary: Accept-Encoding
       content-encoding: gzip
     body:
-      string: '{"glossaries":[{"glossary_id":"42","name":"glosario","ready":true,"source_lang":"en","target_lang":"es","creation_time":"2022-10-18T13:20:13.807055Z","entry_count":46}]}'
-  recorded_at: 2026-01-26 12:16:20
-recorded_with: VCR-vcr/2.1.1.91
+      string: '{"glossaries":[]}'
+  recorded_at: 2026-04-14 15:50:55
+recorded_with: VCR-vcr/2.1.0

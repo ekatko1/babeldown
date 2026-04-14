@@ -192,6 +192,14 @@ translate_part <- function(
   fences <- woolish$get_protected("fence")
   purrr::walk(fences, protect_fence)
 
+  ## protect content inside emph and strong tags ----
+  emphs <- woolish$get_protected("emph")
+  purrr::walk(emphs, protect_emph)
+
+  strongs <- woolish$get_protected("strong")
+  purrr::walk(strongs, protect_strong)
+
+
   ## protect content inside square brackets ----
   contain_square_brackets <- xml2::xml_find_all(
     woolish$body,
@@ -230,7 +238,7 @@ translate_part <- function(
       non_splitting_tags = "text,softbreak,strong,emph",
       formality = formality,
       glossary_id = glossary_id,
-      ignore_tags = "code,code_block,curly,math,notranslate,fence"
+      ignore_tags = "code,code_block,curly,math,notranslate,fence,emph_protected,strong_protected"
     ) |>
       purrr::compact()
 
@@ -261,6 +269,14 @@ translate_part <- function(
     target_lang = target_lang,
     formality = formality
   )
+
+  ## Make emph tags emph tags again ----
+  emphs <- xml2::xml_find_all(woolish$body, "//d1:emph_protected")
+  purrr::walk(emphs, unprotect_emph)
+  ## Make strong tags strong tags again ----
+  strongs <- xml2::xml_find_all(woolish$body, "//d1:strong_protected")
+  purrr::walk(strongs, unprotect_strong)
+
   purrr::walk(curlies, unprotect_curly)
   ## Make math tags text tags again ----
   maths <- xml2::xml_find_all(woolish$body, "//d1:math")
@@ -505,6 +521,23 @@ protect_non_code_block <- function(non_code_block) {
 unprotect_non_code_block <- function(non_code_block) {
   xml2::xml_name(non_code_block) <- "code_block"
 }
+
+protect_emph <- function(emph) {
+  xml2::xml_attr(emph, "emph") <- "yes"
+  xml2::xml_name(emph) <- "emph_protected"
+}
+unprotect_emph <- function(emph) {
+  xml2::xml_name(emph) <- "emph"
+}
+
+protect_strong <- function(strong) {
+  xml2::xml_attr(strong, "strong") <- "yes"
+  xml2::xml_name(strong) <- "strong_protected"
+}
+unprotect_strong <- function(strong) {
+  xml2::xml_name(strong) <- "strong"
+}
+
 
 untangle_text <- function(node) {
   text <- xml2::xml_text(node)

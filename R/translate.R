@@ -227,7 +227,7 @@ translate_part <- function(
       source_lang = source_lang,
       target_lang = target_lang,
       tag_handling = "xml",
-      non_splitting_tags = "text,softbreak",
+      non_splitting_tags = "text,softbreak,strong,emph",
       formality = formality,
       glossary_id = glossary_id,
       ignore_tags = "code,code_block,curly,math,notranslate,fence"
